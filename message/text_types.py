@@ -5,5 +5,7 @@ class TextType(nMessageType):
     GENERATE : str = "generate"
     SET_MODEL : str = "set_model"
 
+    NO_IMPLEMENTATION : str = "no_implementation"
+
     GENERATE_USAGE : str = "generate_usage"
     SET_MODEL_USAGE : str = "set_model_usage"

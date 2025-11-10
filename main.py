@@ -10,6 +10,8 @@ def main() -> None:
     try:
         botHandler = BotHandler(PARAMETERS['BOT_TOKEN'])
         botHandler.add_command_handlers(COMMANDS)
+
+        print("Bot is launching...")
         botHandler.start_bot()
     except Exception as e:
         print(e)
