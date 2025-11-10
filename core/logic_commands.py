@@ -18,7 +18,9 @@ async def _start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     PROFILE_STORE.set_record(
         tg_id,
-        default_value
+        AiModelSettings(
+            default_value
+        )
     )
 
     possiable_options_string : str = " ".join(
@@ -31,7 +33,7 @@ async def _start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             TEXT_LOADER.get_modefied_text(
                 TextType.START,
                 [
-                    default_value,
+                    default_value.value,
                     possiable_options_string
                 ]
             )
@@ -60,7 +62,7 @@ async def _profile(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await _send_fail()
         return
 
-    username : str = update.effective_user
+    username : str = f"@{update.effective_user.username}"
     ai_level : str = profile._aiLevel.value
 
     await send_message_tg(
@@ -89,7 +91,7 @@ async def _set_model(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
 
         possiable_options_string : str = " ".join(possiable_options)
 
-        send_message_tg(
+        await send_message_tg(
             chat_w=chat_wrapper(update, context),
             message_w=message_wrapper(
                 TEXT_LOADER.get_modefied_text(
@@ -101,7 +103,7 @@ async def _set_model(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
             )
         )
 
-    if not context.args or context.args > 1:
+    if not context.args or len(context.args) > 1:
         await _send_fail()
         return
 
