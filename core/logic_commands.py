@@ -7,7 +7,16 @@ from bot.wrappers import function_wrapper, message_wrapper, chat_wrapper
 from bot.chat import send_message_tg
 
 async def _start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    pass
+    global TEXT_LOADER
+
+    await send_message_tg(
+        chat_w=chat_wrapper(update, context),
+        message_w=message_wrapper(
+            TEXT_LOADER.get_message(
+                TextType.START
+            )
+        )
+    )
 
 async def _generate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     pass
