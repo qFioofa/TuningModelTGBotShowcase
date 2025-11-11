@@ -1,2 +1,8 @@
 python-telegram-bot>=20.0
 python-dotenv
+torch>=2.4.0
+transformers>=4.51.3,!=4.52.0,!=4.52.1,!=4.52.2,!=4.52.3,!=4.53.0,!=4.54.0,!=4.55.0,!=4.55.1,!=4.57.0,<=4.57.2
+unsloth>=2025.11.2
+peft>=0.17.1
+accelerate
+bitsandbytes
