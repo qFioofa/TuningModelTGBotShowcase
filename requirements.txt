@@ -6,3 +6,4 @@ unsloth>=2025.11.2
 peft>=0.17.1
 accelerate
 bitsandbytes
+hf_xet

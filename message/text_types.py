@@ -14,3 +14,6 @@ class TextType(nMessageType):
     SET_MODEL_SUCCESS : str = "set_model_success"
 
     PROFILE_FAIL : str = "profile_fail"
+    GENERATE_FAIL : str = "generate_fail"
+
+    TEST : str = "test"

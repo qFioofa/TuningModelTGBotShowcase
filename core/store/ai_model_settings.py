@@ -1,9 +1,25 @@
 from enum import Enum
 from core.store.profile_store import ProfileBase
 
+class AiModelNames(Enum):
+    mistral: str = "unsloth/mistral-7b-instruct-v0.3-bnb-4bit"
+    phi : str = "unsloth/Phi-3-mini-4k-instruct-bnb-4bit"
+
 class AiLevel(Enum):
-    ONE : str = "one"
+    ONE : str = "conflict_mistral"
     TWO : str = "two"
+
+_MODEL_TO_LEVEL_DICT : dict[AiLevel, AiModelNames] = {
+    AiLevel.ONE : AiModelNames.mistral,
+    AiLevel.TWO : AiModelNames.phi
+}
+
+def ai_level_to_model(level : AiLevel) -> str | None:
+    global _MODEL_TO_LEVEL_DICT
+
+    return _MODEL_TO_LEVEL_DICT.get(
+        level
+    ).value
 
 def get_ai_level(value : str) -> AiLevel | None:
     for _v in AiLevel:
@@ -11,6 +27,7 @@ def get_ai_level(value : str) -> AiLevel | None:
             return _v
 
     return None
+
 
 def get_default_ai_level() -> AiLevel:
     arr : list[AiLevel] = [option for option in AiLevel]
