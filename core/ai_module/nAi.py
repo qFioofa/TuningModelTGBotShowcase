@@ -9,7 +9,6 @@ MAX_SEED_VALUE: Final[int] = 2**32 - 1
 USER_CHAT_TEXT : Final[str] = """
     Сгеренируй, что требуется в системном промпте.
     Запрещено повторять предыдущие ситуации.
-    Всегда старайся сгенерировать новый тип, контекст и персонажий
 """
 _NO_GENERATION_ERROR : Final[str] = "Response result doesn't contain generated text"
 
@@ -42,8 +41,7 @@ class nAi:
         self._chat_history_limit = int(chat_history_limit)
         self._load_json(post_json_filepath)
 
-    def generate(self, system_message : str, history: list[str] = []) -> str:
-        global _NO_GENERATION_ERROR
+    def generate(self, system_message : str, history: list[str] | str = []) -> str:
 
         resp: Response = post(
             self._api_url,
@@ -55,7 +53,13 @@ class nAi:
             timeout=self._timeout
         )
 
-        _result : dict = resp.json()
+        return self._repsonse_resolve(resp)
+
+    def _repsonse_resolve(self, response : Response) -> str:
+        global _NO_GENERATION_ERROR
+
+        _result : dict = response.json()
+
         if _result.get("error"):
             raise RuntimeError(_result.get("error"))
         if not _result.get("choices"):
@@ -81,8 +85,18 @@ class nAi:
         _result_post_json["seed"] = self._get_seed()
         return _result_post_json
 
-    def _insert_messages(self, post_json : dict, system_message : str, history: list[str]) -> dict:
+    def _insert_messages(self, post_json : dict, system_message : str, history: list[str] | str) -> dict:
         global USER_CHAT_TEXT
+
+        if isinstance(history, str):
+            return self._insert_user_promt(
+                post_json,
+                system_message,
+                history
+            )
+
+        if not isinstance(history, list):
+            raise ValueError("History should be a list")
 
         _messages_property : list[dict[str,str]] = post_json["messages"]
 
@@ -110,6 +124,24 @@ class nAi:
             _assistent_message["content"] = str(history[id])
             _messages_property.append(_assistent_message)
 
+        _messages_property.append(_user_message)
+
+        return post_json
+
+    def _insert_user_promt(self, post_json : dict, system_message : str, user_promt : str) -> dict:
+        _messages_property : list[dict[str,str]] = post_json["messages"]
+
+        _system_message : dict[str, str] = {
+            "role": nAiChatRoles.SYSTEM.value,
+            "content": system_message
+        }
+
+        _user_message : dict[str, str] = {
+            "role" : nAiChatRoles.USER.value,
+            "content" : user_promt
+        }
+
+        _messages_property.append(_system_message)
         _messages_property.append(_user_message)
 
         return post_json

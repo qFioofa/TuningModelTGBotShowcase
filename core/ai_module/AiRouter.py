@@ -1,5 +1,10 @@
-from core.store.ai_model_settings import AiLevel, ai_level_to_model
+from typing import Final
 from core.ai_module.nAi import nAi
+from core.store.ai_model_settings import AiLevel, ai_level_to_model
+
+_DEFAULT_SYSTEM_PROMT : Final[str] = """
+    Сгенерируй тип текста, который ты лучше всего умеешь.
+"""
 
 class AiRouter:
     _rout : dict[AiLevel , nAi]
@@ -52,11 +57,13 @@ class AiRouter:
         if _model is None:
             raise RuntimeError(f"Model: {model.value} does not exist or failed to load")
 
+        if self._system_message is None:
+            global _DEFAULT_SYSTEM_PROMT
+            self._system_message = _DEFAULT_SYSTEM_PROMT
+
         response : str = _model.generate(
             self._system_message,
-            [
-                user_response
-            ]
+            user_response
         )
 
         return response

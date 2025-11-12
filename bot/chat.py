@@ -23,3 +23,8 @@ async def send_message_tg(chat_w : chat_wrapper, message_w : message_wrapper) ->
         await query.message.reply_text(text=text, reply_markup = reply_markup, parse_mode=parse_mode)
         return
     await update.message.reply_text(text=text, reply_markup=reply_markup, parse_mode=parse_mode)
+
+async def delete_last_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    chat_id: int = update.effective_message.chat_id
+    message_id : int = update.effective_message.message_id + 1
+    await context.bot.delete_message(chat_id=chat_id, message_id=message_id)

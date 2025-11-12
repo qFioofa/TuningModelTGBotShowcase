@@ -33,7 +33,7 @@ def _init_profile_store() -> ProfileStore:
 def _init_ai_module() -> AiRouter:
     global PARAMETERS
 
-    return AiRouter(
+    aiRouter : AiRouter = AiRouter(
         PARAMETERS['AI_TOKEN'],
         PARAMETERS['AI_URL'],
         PARAMETERS['AI_RESPONSE_TIMEOUT'],
@@ -41,6 +41,13 @@ def _init_ai_module() -> AiRouter:
         PARAMETERS['AI_HISTORY_CHAT_LIMIT']
     )
 
+    return aiRouter
+
 TEXT_LOADER : nMessage = _init_text_loader()
 PROFILE_STORE : ProfileStore = _init_profile_store()
 AI_ROUTER : AiRouter = _init_ai_module()
+AI_ROUTER.init_system_message(
+    TEXT_LOADER.get_message(
+        TextType.SYSTEM_PROMT
+    )
+)
