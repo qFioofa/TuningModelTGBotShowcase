@@ -1,5 +1,6 @@
 from core.store.ai_model_settings import AiLevel, ai_level_to_model
 from core.ai_module.nAi import nAi
+from core.ai_module.model_app_2 import TUNED_MODEL
 
 class AiRouter:
     _rout : dict[AiLevel , nAi]
@@ -47,16 +48,17 @@ class AiRouter:
         self._system_message = system_message
 
     def get_response(self, model : AiLevel, user_response : str) -> str:
-        _model : nAi | None = self._rout.get(model)
-
-        if _model is None:
-            raise RuntimeError(f"Model: {model.value} does not exist or failed to load")
-
-        response : str = _model.generate(
-            self._system_message,
-            [
-                user_response
-            ]
-        )
-
-        return response
+        return TUNED_MODEL.get_response(user_response)
+        # _model : nAi | None = self._rout.get(model)
+        #
+        # if _model is None:
+        #     raise RuntimeError(f"Model: {model.value} does not exist or failed to load")
+        #
+        # response : str = _model.generate(
+        #     self._system_message,
+        #     [
+        #         user_response
+        #     ]
+        # )
+        #
+        # return response

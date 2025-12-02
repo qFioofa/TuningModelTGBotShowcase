@@ -43,6 +43,7 @@ class nAi:
         self._load_json(post_json_filepath)
 
     def generate(self, system_message : str, history: list[str] = []) -> str:
+        return "huy"
         global _NO_GENERATION_ERROR
 
         resp: Response = post(
