@@ -2,15 +2,15 @@ from enum import Enum
 from core.store.profile_store import ProfileBase
 
 class AiModelNames(Enum):
-    mistral: str = "unsloth/mistral-7b-instruct-v0.3-bnb-4bit"
+    ONE: str = "Qwen/Qwen3-235B-A22B-Instruct-2507"
     phi : str = "unsloth/Phi-3-mini-4k-instruct-bnb-4bit"
 
 class AiLevel(Enum):
     ONE : str = "conflict_mistral"
-    TWO : str = "two"
+    TWO : str = "conflict_phi"
 
 _MODEL_TO_LEVEL_DICT : dict[AiLevel, AiModelNames] = {
-    AiLevel.ONE : AiModelNames.mistral,
+    AiLevel.ONE : AiModelNames.ONE,
     AiLevel.TWO : AiModelNames.phi
 }
 

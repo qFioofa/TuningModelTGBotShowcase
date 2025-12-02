@@ -12,11 +12,10 @@ from core.store.ai_model_settings import (
     get_default_ai_level,
 )
 
-from core.ai_module.__aiModule import AiChatRoles
 from core.ai_module.ai_formating import format_response
 
 from bot.wrappers import function_wrapper, message_wrapper, chat_wrapper
-from bot.chat import send_message_tg, get_tg_id
+from bot.chat import send_message_tg, get_tg_id, delete_last_message
 
 async def _send_profile_fail(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await send_message_tg(
@@ -116,18 +115,18 @@ async def _generate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             )
         )
 
-    def get_messages(user_context : str) -> list[dict[str, str]]:
-        return [
-            {
-                "role" : AiChatRoles.USER.value,
-                "content" : user_context
-            }
-        ]
-
-
     if _user_words_len > _word_limit:
         await _send_usage()
         return
+
+    await send_message_tg(
+        chat_w=chat_wrapper(update, context),
+        message_w=message_wrapper(
+            TEXT_LOADER.get_message(
+                TextType.GENERATE_PROCCESS
+            )
+        )
+    )
 
     try:
         tg_id: int = await get_tg_id(update, context)
@@ -136,19 +135,21 @@ async def _generate(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         )
     except Exception:
         await _send_profile_fail()
+        await delete_last_message(update, context)
         return
 
-
-    ai_level : str = profile._aiLevel.value
+    ai_level : AiLevel = profile._aiLevel
     user_context : str = " ".join(context.args)
 
     try:
-        ai_response: str = AI_ROUTER.get_response(ai_level, get_messages(user_context))
+        ai_response: str = AI_ROUTER.get_response(ai_level, user_context)
         generated_text: str = format_response(ai_response)
     except Exception as e:
         print(e)
         await _send_fail()
         return
+    finally:
+        await delete_last_message(update, context)
 
     await send_message_tg(
         chat_w=chat_wrapper(update, context),
@@ -170,7 +171,9 @@ async def _set_model(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     async def _send_fail() -> None:
         global TEXT_LOADER
 
-        possiable_options_string : str = " ".join(possiable_options)
+        possiable_options_string : str = "\n".join(
+            f"`{element}`" for element in possiable_options
+        )
 
         await send_message_tg(
             chat_w=chat_wrapper(update, context),
