@@ -1,14 +1,11 @@
 from typing import Final
 from core.ai_module.nAi import nAi
-<<<<<<< HEAD
 from core.ai_module.model_app_2 import TUNED_MODEL
-=======
 from core.store.ai_model_settings import AiLevel, ai_level_to_model
 
 _DEFAULT_SYSTEM_PROMT : Final[str] = """
     Сгенерируй тип текста, который ты лучше всего умеешь.
 """
->>>>>>> 23d521c2835ae1d03943d9b9b1e262422050a65e
 
 class AiRouter:
     _rout : dict[AiLevel , nAi]
@@ -56,7 +53,6 @@ class AiRouter:
         self._system_message = system_message
 
     def get_response(self, model : AiLevel, user_response : str) -> str:
-<<<<<<< HEAD
         return TUNED_MODEL.get_response(user_response)
         # _model : nAi | None = self._rout.get(model)
         #
@@ -71,20 +67,18 @@ class AiRouter:
         # )
         #
         # return response
-=======
-        _model : nAi | None = self._rout.get(model)
-
-        if _model is None:
-            raise RuntimeError(f"Model: {model.value} does not exist or failed to load")
-
-        if self._system_message is None:
-            global _DEFAULT_SYSTEM_PROMT
-            self._system_message = _DEFAULT_SYSTEM_PROMT
-
-        response : str = _model.generate(
-            self._system_message,
-            user_response
-        )
-
-        return response
->>>>>>> 23d521c2835ae1d03943d9b9b1e262422050a65e
+        # _model : nAi | None = self._rout.get(model)
+        #
+        # if _model is None:
+        #     raise RuntimeError(f"Model: {model.value} does not exist or failed to load")
+        #
+        # if self._system_message is None:
+        #     global _DEFAULT_SYSTEM_PROMT
+        #     self._system_message = _DEFAULT_SYSTEM_PROMT
+        #
+        # response : str = _model.generate(
+        #     self._system_message,
+        #     user_response
+        # )
+        #
+        # return response
