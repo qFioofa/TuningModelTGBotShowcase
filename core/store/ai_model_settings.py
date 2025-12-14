@@ -2,8 +2,8 @@ from enum import Enum
 from core.store.profile_store import ProfileBase
 
 class AiModelNames(Enum):
-    ONE: str = "Qwen/Qwen3-235B-A22B-Instruct-2507"
-    phi : str = "unsloth/Phi-3-mini-4k-instruct-bnb-4bit"
+    ONE: str = "BroneBonBon/Conflict-Generator-Mistral-v2"
+    phi : str = "BroneBonBon/Conflict-Generator-Phi-v2"
 
 class AiLevel(Enum):
     ONE : str = "conflict_mistral"

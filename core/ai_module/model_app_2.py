@@ -257,7 +257,7 @@ class AiModule:
         }
 
 TUNED_MODEL = AiModule(
-    model_name="BroneBonBon/Conflict-Generator-Mistral",
+    model_name="BroneBonBon/Conflict-Generator-Mistral-v2",
     use_4bit=True,
     load_mode="finetuned"  
 )
